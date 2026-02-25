@@ -48,6 +48,9 @@ const ModelViewer: React.FC = () => {
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enabled = false; // Disable user interaction
+    controls.autoRotate = true; // Optional: keep it moving slightly so it's not static
+    controls.autoRotateSpeed = 2;
     controls.enableDamping = true;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 4;

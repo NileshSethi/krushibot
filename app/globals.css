@@ -33,7 +33,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    overflow: hidden;
     user-select: none;
   }
 }
@@ -47,6 +46,21 @@
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+  white-space: nowrap;
+}
+
+.animate-marquee-slow {
+  animation: marquee 25s linear infinite;
+  white-space: nowrap;
 }
 
 .radial-glow {
@@ -65,3 +79,14 @@
 canvas {
   display: block;
 }
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee-slow {
+  animation: marquee 25s linear infinite;
+  white-space: nowrap;
+}
+
