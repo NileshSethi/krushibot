@@ -10,9 +10,9 @@ export default function DashboardNav() {
   const [user, setUser] = useState<string | null>(null);
 
   useEffect(() => {
-    // Only access localStorage on client mount
+    // Only access sessionStorage on client mount
     if (typeof window !== 'undefined') {
-      const storedUser = localStorage.getItem('krushibot_user');
+      const storedUser = sessionStorage.getItem('krushibot_user');
       if (storedUser) {
         try {
           setUser(JSON.parse(storedUser));
@@ -21,11 +21,27 @@ export default function DashboardNav() {
         }
       }
     }
+
+    // End session when tab/window is closed
+    const handleBeforeUnload = () => {
+      // Use sendBeacon to reliably call logout even during page close
+      navigator.sendBeacon('/api/auth/logout');
+      sessionStorage.removeItem('krushibot_user');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('krushibot_user');
-    window.location.href = '/';
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error('Logout failed', e);
+    }
+    sessionStorage.removeItem('krushibot_user');
+    sessionStorage.removeItem('verified_email');
+    window.location.href = '/login';
   };
 
   return (
