@@ -59,7 +59,7 @@ export default function LandingPage() {
         </p>
 
         <div className='flex flex-col md:flex-row gap-4 animate-fade-in delay-200'>
-          <Link href='/dashboard'>
+          <Link href='/signup'>
             <Button className='h-12 px-8 rounded-full bg-white text-black hover:bg-gray-200 font-semibold tracking-wide'>
               Launch Console <ArrowRight className='ml-2 w-4 h-4' />
             </Button>
@@ -121,7 +121,7 @@ export default function LandingPage() {
 
           <div className='grid md:grid-cols-3 gap-8'>
             {[
-              { title: 'Real-time Telemetry', desc: 'Monitor battery, signal strength, and motor status instantly.' },
+              { title: 'Real-time Telemetry', desc: 'Monitor speed, signal strength, and motor status instantly.' },
               { title: 'Global Positioning', desc: 'Track your units anywhere on the globe with sub-meter accuracy.' },
               { title: 'Neural Navigation', desc: 'AI-driven pathfinding avoids obstacles automatically.' },
             ].map((feature, i) => (
@@ -142,7 +142,7 @@ export default function LandingPage() {
           <p className='text-muted-foreground text-lg'>
             Join the automated revolution today. Access the console and take control.
           </p>
-          <Link href='/dashboard'>
+          <Link href='/signup'>
             <Button className='h-16 px-12 text-lg rounded-full shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-none transition-all'>
               Enter Dashboard
             </Button>

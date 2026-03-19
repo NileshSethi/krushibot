@@ -35,7 +35,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto'>
                 <Card className='glass-card p-6 flex flex-col items-center justify-center gap-4 text-center border-emerald-500/20 hover:border-emerald-500/40 transition-colors group'>
                     <div className='p-4 rounded-full bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform'>
                     <Activity className='w-8 h-8' />
@@ -43,16 +43,6 @@ export default function DashboardPage() {
                     <div>
                     <h3 className='font-semibold text-lg'>Link Status</h3>
                     <p className='text-emerald-400 text-sm font-mono'>CONNECTED - 5G</p>
-                    </div>
-                </Card>
-
-                <Card className='glass-card p-6 flex flex-col items-center justify-center gap-4 text-center border-blue-500/20 hover:border-blue-500/40 transition-colors group'>
-                    <div className='p-4 rounded-full bg-blue-500/10 text-blue-500 group-hover:scale-110 transition-transform'>
-                    <Zap className='w-8 h-8' />
-                    </div>
-                    <div>
-                    <h3 className='font-semibold text-lg'>Power Cell</h3>
-                    <p className='text-blue-400 text-sm font-mono'>87% CHARGED</p>
                     </div>
                 </Card>
                 

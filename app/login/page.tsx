@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
@@ -13,54 +13,41 @@ export default function LoginPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     operator_id: '',
     password: ''
   })
 
-  // Check if user came from signup (email verified)
-  useEffect(() => {
-    const email = sessionStorage.getItem('verified_email')
-    if (email) {
-      setVerifiedEmail(email)
-    }
-  }, [])
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
-    // Email must have been verified first via signup page
-    if (!verifiedEmail) {
-      setError('You must verify your email first. Go to the signup page.')
-      setLoading(false)
-      return
-    }
-
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           operator_id: formData.operator_id,
-          password: formData.password,
-          email: verifiedEmail // Pass the email that was verified in step 1
+          password: formData.password
         })
       })
 
       const data = await res.json()
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Login failed')
+      if (res.status === 404 && data.message === 'USER_NOT_FOUND') {
+        router.push('/signup')
+        return
+      } else if (res.status === 401 && data.message === 'INVALID_PASSWORD') {
+        throw new Error('Invalid password.')
+      } else if (!res.ok) {
+        throw new Error(data.message || 'Login failed')
       }
 
-      // All 3 matched — session is created (JWT in HTTP-only cookie)
       sessionStorage.setItem('krushibot_user', JSON.stringify(formData.operator_id))
-      sessionStorage.removeItem('verified_email') // Clean up
-
+      // Force immediate redirect to dashboard
       router.push('/dashboard')
 
     } catch (err: any) {
@@ -85,23 +72,11 @@ export default function LoginPage() {
           <p className='text-muted-foreground mt-2 text-sm text-gray-400'>
             Authenticate to access control systems
           </p>
-          {verifiedEmail && (
-            <p className='text-emerald-400 mt-2 text-xs'>
-              Email verified: {verifiedEmail}
-            </p>
-          )}
         </div>
 
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded mb-4 text-sm text-center">
             {error}
-          </div>
-        )}
-
-        {!verifiedEmail && (
-          <div className="bg-amber-500/10 border border-amber-500/50 text-amber-400 p-3 rounded mb-4 text-sm text-center">
-            You must verify your email first.{' '}
-            <Link href="/signup" className="underline font-medium">Go to signup</Link>
           </div>
         )}
 
@@ -135,14 +110,20 @@ export default function LoginPage() {
           <Button
             type='submit'
             className='w-full bg-emerald-600 hover:bg-emerald-700 text-white'
-            disabled={loading || !verifiedEmail}
+            disabled={loading}
           >
             {loading ? 'Authenticating...' : 'Initialize Session'}
           </Button>
         </form>
 
-        <div className='mt-6 text-center text-xs text-muted-foreground'>
-          Protected by military-grade encryption protocols
+        <div className='mt-6 border-t border-white/5 pt-4 text-center'>
+          <p className='text-xs text-muted-foreground mb-3'>Protected by military-grade encryption protocols</p>
+          <p className='text-xs text-muted-foreground mb-3'>New operator?</p>
+          <Link href='/signup' className='block w-full'>
+            <Button variant="outline" className='w-full border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300'>
+              Go to Signup Page
+            </Button>
+          </Link>
         </div>
       </Card>
     </div>

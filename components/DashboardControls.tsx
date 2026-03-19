@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Badge } from '@/components/ui/badge'
-import { Power, CircleStop, TriangleAlert, Cpu, Activity, Wifi, Gamepad2, Battery, Gauge } from 'lucide-react'
+import { Power, CircleStop, TriangleAlert, Cpu, Activity, Wifi, Gamepad2, Gauge } from 'lucide-react'
 
 const DashboardControls: React.FC = () => {
   const [speed, setSpeed] = useState([50])
@@ -75,7 +75,7 @@ const DashboardControls: React.FC = () => {
     <div className='flex flex-col gap-6 w-full animate-fade-in'>
       
       {/* 1. Status Overview */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <Card className='glass-card p-4 flex items-center justify-between'>
           <div className='flex items-center gap-3'>
             <div className='p-2 rounded-lg bg-emerald-500/10'>
@@ -84,18 +84,6 @@ const DashboardControls: React.FC = () => {
             <div>
               <p className='text-xs text-muted-foreground uppercase'>Status</p>
               <div className='mt-1'>{getStatusBadge()}</div>
-            </div>
-          </div>
-        </Card>
-
-        <Card className='glass-card p-4 flex items-center justify-between'>
-          <div className='flex items-center gap-3'>
-            <div className='p-2 rounded-lg bg-blue-500/10'>
-              <Battery className='w-5 h-5 text-blue-400' />
-            </div>
-            <div>
-              <p className='text-xs text-muted-foreground uppercase'>Battery</p>
-              <p className='text-lg font-bold text-white'>84%</p>
             </div>
           </div>
         </Card>
@@ -133,7 +121,7 @@ const DashboardControls: React.FC = () => {
             <h2 className='text-sm font-medium uppercase tracking-wider text-white'>Command Center</h2>
           </div>
           
-          <div className='grid md:grid-cols-2 gap-8'>
+          <div className='grid md:grid-cols-1 gap-8'>
              {/* Power Controls */}
             <div className='space-y-4'>
               <h3 className='text-xs text-muted-foreground uppercase tracking-widest mb-2'>Power Operations</h3>
@@ -156,29 +144,6 @@ const DashboardControls: React.FC = () => {
                 >
                   <TriangleAlert className='w-4 h-4 mr-3' /> EMERGENCY STOP
                 </Button>
-              </div>
-            </div>
-
-            {/* Speed Control */}
-            <div className='space-y-4'>
-              <h3 className='text-xs text-muted-foreground uppercase tracking-widest mb-2'>Speed Governor</h3>
-              <div className='p-6 rounded-xl bg-black/40 border border-white/5 h-full flex flex-col justify-center'>
-                <div className='flex justify-between items-center mb-6'>
-                  <span className='text-xs text-muted-foreground'>PWM Output</span>
-                  <span className='text-xl font-mono text-emerald-400'>{speed[0]}%</span>
-                </div>
-                <Slider 
-                  value={speed} 
-                  onValueChange={setSpeed} 
-                  max={100} 
-                  step={1}
-                  className='py-4'
-                />
-                <div className='flex justify-between text-[10px] text-muted-foreground mt-2 font-mono'>
-                  <span>0%</span>
-                  <span>50%</span>
-                  <span>100%</span>
-                </div>
               </div>
             </div>
           </div>

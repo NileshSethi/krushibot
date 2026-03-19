@@ -6,16 +6,18 @@ import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { UserPlus, Mail } from 'lucide-react'
+import { UserPlus, Mail, User, Lock } from 'lucide-react'
 import StarBackground from '@/components/StarBackground'
 
 export default function SignupPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [email, setEmail] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [formData, setFormData] = useState({
+    operator_id: '',
+    email: '',
+    password: ''
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,22 +25,27 @@ export default function SignupPage() {
     setError(null)
 
     try {
-      // Step 1: Check if the email exists in the operators database
-      const res = await fetch('/api/auth/verify-email', {
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        credentials: 'include',
+        body: JSON.stringify(formData)
       })
 
       const data = await res.json()
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Email verification failed')
+      if (res.status === 409 && data.message === 'USER_EXISTS') {
+        router.push('/login')
+        return
       }
 
-      // Email verified — store it and redirect to login page
-      sessionStorage.setItem('verified_email', email)
-      router.push('/login')
+      if (!res.ok) {
+        throw new Error(data.message || 'Signup failed')
+      }
+
+      // Auto-login the user and go straight to the dashboard
+      sessionStorage.setItem('krushibot_user', JSON.stringify(formData.operator_id))
+      router.push('/dashboard')
 
     } catch (err: any) {
       setError(err.message)
@@ -69,46 +76,54 @@ export default function SignupPage() {
         )}
 
         <form onSubmit={handleSubmit} className='space-y-4'>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='space-y-2'>
-              <Input 
-                placeholder='First Name' 
-                className='bg-black/50 border-white/10' 
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                required 
-              />
-            </div>
-            <div className='space-y-2'>
-              <Input 
-                placeholder='Last Name' 
-                className='bg-black/50 border-white/10' 
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required 
-              />
-            </div>
+          <div className='space-y-2 relative'>
+            <User className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
+            <Input 
+              type='text' 
+              placeholder='Operator ID' 
+              className='pl-9 bg-black/50 border-white/10' 
+              value={formData.operator_id}
+              onChange={(e) => setFormData({...formData, operator_id: e.target.value})}
+              required 
+            />
           </div>
-          
+
           <div className='space-y-2 relative'>
             <Mail className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
             <Input 
               type='email' 
               placeholder='Email Address' 
               className='pl-9 bg-black/50 border-white/10' 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              required 
+            />
+          </div>
+
+          <div className='space-y-2 relative'>
+            <Lock className='absolute left-3 top-3 h-4 w-4 text-muted-foreground' />
+            <Input 
+              type='password' 
+              placeholder='Password' 
+              className='pl-9 bg-black/50 border-white/10' 
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
               required 
             />
           </div>
 
           <Button type='submit' className='w-full bg-blue-600 hover:bg-blue-500 text-white' disabled={loading}>
-            {loading ? 'Verifying Email...' : 'Submit Credentials'}
+            {loading ? 'Registering...' : 'Submit Credentials'}
           </Button>
         </form>
 
-        <div className='mt-6 text-center text-xs text-muted-foreground'>
-          Already have clearance? <Link href='/login' className='text-blue-400 hover:underline'>Login here</Link>
+        <div className='mt-6 border-t border-white/5 pt-4 text-center'>
+          <p className='text-xs text-muted-foreground mb-3'>Already have clearance?</p>
+          <Link href='/login' className='block w-full'>
+            <Button variant="outline" className='w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300'>
+              Go to Login Page
+            </Button>
+          </Link>
         </div>
       </Card>
     </div>

@@ -5,11 +5,14 @@ import { jwtVerify } from 'jose';
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
 
-  // Protected Routes
-  if (
-    request.nextUrl.pathname.startsWith('/dashboard') ||
-    request.nextUrl.pathname.startsWith('/controls')
-  ) {
+  // Protected Routes - Now pushing ALL traffic except auth/login/signup to verify first.
+  const path = request.nextUrl.pathname;
+  const isAuthRoute = path.startsWith('/login') || path.startsWith('/signup') || path.startsWith('/api/auth');
+  const isStaticFile = path.startsWith('/_next') || path.includes('.');
+  const isPublicLanding = path === '/' || path === '/favicon.ico';
+
+  // If the user tries to go ANYWHERE else other than login/signup, they must be authenticated.
+  if (!isAuthRoute && !isStaticFile && !isPublicLanding) {
     if (!token) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
@@ -20,12 +23,7 @@ export async function middleware(request: NextRequest) {
       );
 
       // Verify JWT using jose (Edge compatible)
-      const { payload } = await jwtVerify(token, secret);
-
-      // Check if token was issued during current server session
-      if (payload.boot_id !== process.env.SERVER_BOOT_ID) {
-        throw new Error('Server restarted — session invalidated');
-      }
+      await jwtVerify(token, secret);
 
       // Token valid — allow access
       return NextResponse.next();
@@ -41,5 +39,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/controls/:path*'],
+  // Catch all routes except api, _next/static, _next/image, favicon.ico
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
