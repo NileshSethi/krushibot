@@ -194,10 +194,10 @@ Use Live Server or open `login.html`.
 
 ## Authors
 
-Nilesh Sethi
-    Sai Randive 
-    Yash Samtani
-    Vaishnovi Bhosle 
+Nilesh Sethi |
+Sai Randive  |
+Yash Samtani |
+Vaishnovi Bhosle 
 
 BTech Computer Science Engineering
 
