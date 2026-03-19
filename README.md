@@ -2,9 +2,9 @@
 
 ## Overview
 
-PBL1 is a full-stack web application designed to deliver a responsive, visually immersive interface combined with a secure and efficient authentication system. The platform integrates modern frontend rendering techniques with a robust backend architecture to ensure both performance and reliability.
+This is a full stack web application designed to deliver a responsive, visually immersive interface combined with a secure and efficient authentication system. The platform integrates modern frontend rendering techniques with a robust backend architecture to ensure both performance and reliability.
 
-The system emphasizes minimal latency, clean authentication flow, and structured scalability, making it suitable for real-world deployment scenarios.
+The system emphasizes minimal latency, clean authentication flow, and structured scalability, making it suitable for real world deployment scenarios.
 
 
 
@@ -12,7 +12,7 @@ The system emphasizes minimal latency, clean authentication flow, and structured
 
 ### 1. Secure Operator Authentication
 
-* Operator-based login system using **operator ID and password**
+* Operator based login system using **operator ID and password**
 * Passwords securely hashed using **bcrypt**
 * Stateless authentication via **JWT**
 * Protected routes using middleware
@@ -29,10 +29,10 @@ The system emphasizes minimal latency, clean authentication flow, and structured
 
 
 
-### 3. Performance-Oriented Architecture
+### 3. Performance Oriented Architecture
 
 * Optimized backend queries using indexed fields
-* Non-blocking asynchronous request handling
+* Non blocking asynchronous request handling
 * Reduced authentication latency (no OTP overhead)
 * Clean separation of concerns (routes, controllers, middleware)
 
@@ -178,17 +178,17 @@ Use Live Server or open `login.html`.
 * Minimal latency and reduced blocking operations
 * Clear separation of frontend and backend responsibilities
 * Scalable architecture for future expansion
-* Security-first implementation
+* Security first implementation
 
 
 
 ## Future Enhancements
 
-* Role-based access control (RBAC)
+* Role based access control (RBAC)
 * Audit logging and monitoring
 * API rate limiting and advanced security hardening
 * Deployment with containerization (Docker)
-* Cloud-based database integration
+* Cloud based database integration
 
 
 
