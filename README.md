@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+PBL1 [ KRUSHIBOT ] — A Semi-Autonomous 4G-Enabled Smart Agricultural Rover for Precision Ploughing, Seeding, and Irrigation
+Overview
+This is a full stack web application designed to deliver a responsive, visually immersive interface combined with a secure and efficient authentication system. The platform integrates modern frontend rendering techniques with a robust backend architecture to ensure both performance and reliability.
 
-## Getting Started
+The system emphasizes minimal latency, clean authentication flow, and structured scalability, making it suitable for real world deployment scenarios.
 
-First, run the development server:
+Core Features
+1. Secure Operator Authentication
+Operator based login system using operator ID and password
+Passwords securely hashed using bcrypt
+Stateless authentication via JWT
+Protected routes using middleware
+Automatic redirection for unauthorized access
+2. User Lifecycle Management
+Dedicated signup flow for new users
+Persistent storage of user credentials in MySQL
+Validation for duplicate users (operator ID / email)
+Seamless transition between signup and login
+3. Performance Oriented Architecture
+Optimized backend queries using indexed fields
+Non blocking asynchronous request handling
+Reduced authentication latency (no OTP overhead)
+Clean separation of concerns (routes, controllers, middleware)
+4. Interactive Frontend Experience
+Fullscreen responsive layout
+Integrated 3D model rendering using Three.js
+Smooth scroll based transitions
+Minimal and focused UI design
+5. Structured Backend Design
+RESTful API architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Modular folder structure:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+server/
+  ├── controllers/
+  ├── routes/
+  ├── middleware/
+  ├── db.js
+  └── server.js
+Clear separation between business logic and routing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Technology Stack
+Frontend
+HTML5
+CSS3
+Vanilla JavaScript
+Three.js (3D rendering)
+GSAP (animations)
+Backend
+Node.js
+Express.js
+Database
+MySQL
+Security
+bcrypt (password hashing)
+JSON Web Tokens (JWT)
+Authentication Flow
+New User
+→ Signup
+→ Stored in MySQL
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Existing User
+→ Login (operator_id + password)
+→ Credentials Verified
+→ JWT Generated
+→ Access Dashboard
+Project Structure
+pbl1/
+ ├── public/
+ │    ├── login.html
+ │    ├── signup.html
+ │    ├── dashboard.html
+ │    ├── js/
+ │    └── css/
+ │
+ ├── server/
+ │    ├── controllers/
+ │    ├── routes/
+ │    ├── middleware/
+ │    ├── db.js
+ │    └── server.js
+ │
+ ├── assets/
+ │    └── model.glb
+ │
+ ├── package.json
+ └── .env
+Setup Instructions
+1. Clone Repository
+git clone https://github.com/<your-username>/pbl1.git
+cd pbl1
+2. Install Dependencies
+npm install
+3. Configure Environment Variables
+Create .env:
 
-## Learn More
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=yourpassword
+DB_NAME=pbl1
+JWT_SECRET=your_secret_key
+4. Run Server
+node server/server.js
+5. Launch Frontend
+Use Live Server or open login.html.
 
-To learn more about Next.js, take a look at the following resources:
+Design Principles
+Deterministic authentication flow (no ambiguity in access control)
+Minimal latency and reduced blocking operations
+Clear separation of frontend and backend responsibilities
+Scalable architecture for future expansion
+Security first implementation
+Future Enhancements
+Role based access control (RBAC)
+Audit logging and monitoring
+API rate limiting and advanced security hardening
+Deployment with containerization (Docker)
+Cloud based database integration
+Authors
+Nilesh Sethi | Sai Randive | Yash Samtani | Vaishnovi Bhosle
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+BTech Computer Science Engineering
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+License
+This project is intended for academic and development purposes.
