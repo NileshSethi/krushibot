@@ -3,20 +3,38 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
 import { Badge } from '@/components/ui/badge'
-import { Power, CircleStop, TriangleAlert, Cpu, Activity, Wifi, Gamepad2, Gauge } from 'lucide-react'
+import { Power, CircleStop, TriangleAlert, Cpu, Activity, Wifi, Gamepad2, Battery, Sprout, Droplets } from 'lucide-react'
 
 const DashboardControls: React.FC = () => {
-  const [speed, setSpeed] = useState([50])
-  const [status, setStatus] = useState<'connected' | 'running' | 'stopped' | 'emergency'>('connected')
+  const [status, setStatus] = useState<'disconnected' | 'connected' | 'running' | 'stopped' | 'emergency'>('disconnected')
   const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 })
   const joystickRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
+  const [seedingOn, setSeedingOn] = useState(false)
+  const [irrigationOn, setIrrigationOn] = useState(false)
 
   const handleStart = () => setStatus('running')
   const handleStop = () => setStatus('stopped')
   const handleEmergency = () => setStatus('emergency')
+
+  const toggleSeeding = () => {
+    setSeedingOn((prev) => {
+      const next = !prev
+      console.log('Seeding / Ploughing:', next ? 'ON' : 'OFF')
+      // Future hardware integration: send command to actuator controller
+      return next
+    })
+  }
+
+  const toggleIrrigation = () => {
+    setIrrigationOn((prev) => {
+      const next = !prev
+      console.log('Irrigation Pump:', next ? 'ON' : 'OFF')
+      // Future hardware integration: send command to pump relay
+      return next
+    })
+  }
 
   const updateJoystick = (clientX: number, clientY: number) => {
     if (!joystickRef.current) return
@@ -66,6 +84,13 @@ const DashboardControls: React.FC = () => {
         return <Badge variant='outline' className='bg-red-500/10 text-red-500 border-red-500/20'>Emergency Stop</Badge>
       case 'stopped':
         return <Badge variant='outline' className='bg-orange-500/10 text-orange-400 border-orange-500/20'>Stopped</Badge>
+      case 'disconnected':
+        return (
+          <Badge variant='outline' className='bg-red-500/10 text-red-400 border-red-500/30 flex items-center gap-2'>
+            <span className='h-2 w-2 rounded-full bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.9)]'></span>
+            Not Connected
+          </Badge>
+        )
       default:
         return <Badge variant='outline' className='bg-blue-500/10 text-blue-400 border-blue-500/20'>Connected</Badge>
     }
@@ -78,24 +103,27 @@ const DashboardControls: React.FC = () => {
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <Card className='glass-card p-4 flex items-center justify-between'>
           <div className='flex items-center gap-3'>
-            <div className='p-2 rounded-lg bg-emerald-500/10'>
-              <Activity className='w-5 h-5 text-emerald-400' />
+            <div className='p-2 rounded-lg bg-red-500/10 shadow-[0_0_12px_rgba(248,113,113,0.35)]'>
+              <Activity className='w-5 h-5 text-red-400' />
             </div>
             <div>
               <p className='text-xs text-muted-foreground uppercase'>Status</p>
-              <div className='mt-1'>{getStatusBadge()}</div>
+              <div className='mt-1 flex items-center gap-2'>
+                <span className='h-2.5 w-2.5 rounded-full bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.8)]'></span>
+                <Badge variant='outline' className='bg-red-500/10 text-red-400 border-red-500/30'>Not Connected</Badge>
+              </div>
             </div>
           </div>
         </Card>
 
-        <Card className='glass-card p-4 flex items-center justify-between'>
+        <Card className='glass-card p-4 flex items-center justify-between opacity-60'>
           <div className='flex items-center gap-3'>
             <div className='p-2 rounded-lg bg-purple-500/10'>
               <Wifi className='w-5 h-5 text-purple-400' />
             </div>
             <div>
               <p className='text-xs text-muted-foreground uppercase'>Signal</p>
-              <p className='text-lg font-bold text-white'>12ms</p>
+              <p className='text-lg font-bold text-muted-foreground'>--</p>
             </div>
           </div>
         </Card>
@@ -103,11 +131,11 @@ const DashboardControls: React.FC = () => {
         <Card className='glass-card p-4 flex items-center justify-between'>
           <div className='flex items-center gap-3'>
             <div className='p-2 rounded-lg bg-amber-500/10'>
-              <Gauge className='w-5 h-5 text-amber-400' />
+              <Battery className='w-5 h-5 text-amber-400' />
             </div>
             <div>
-              <p className='text-xs text-muted-foreground uppercase'>Speed</p>
-              <p className='text-lg font-bold text-white'>{speed}%</p>
+              <p className='text-xs text-muted-foreground uppercase'>Battery Status</p>
+              <p className='text-lg font-bold text-white'>Battery: --%</p>
             </div>
           </div>
         </Card>
@@ -144,6 +172,41 @@ const DashboardControls: React.FC = () => {
                 >
                   <TriangleAlert className='w-4 h-4 mr-3' /> EMERGENCY STOP
                 </Button>
+              </div>
+            </div>
+
+            <div className='space-y-3'>
+              <h3 className='text-xs text-muted-foreground uppercase tracking-widest'>Implements</h3>
+              <div className='flex flex-wrap gap-6'>
+                <div className='flex flex-col items-center gap-2'>
+                  <button
+                    type='button'
+                    onClick={toggleSeeding}
+                    className={`w-16 h-16 rounded-full border transition-all duration-200 shadow-lg ${
+                      seedingOn
+                        ? 'bg-emerald-500/80 border-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.7)]'
+                        : 'bg-black/40 border-emerald-500/30 shadow-[0_0_14px_rgba(16,185,129,0.35)] hover:shadow-[0_0_18px_rgba(16,185,129,0.55)]'
+                    }`}
+                  >
+                    <Sprout className={`w-7 h-7 mx-auto ${seedingOn ? 'text-white' : 'text-emerald-300'}`} />
+                  </button>
+                  <span className='text-xs text-muted-foreground text-center'>Seeding / Ploughing</span>
+                </div>
+
+                <div className='flex flex-col items-center gap-2'>
+                  <button
+                    type='button'
+                    onClick={toggleIrrigation}
+                    className={`w-16 h-16 rounded-full border transition-all duration-200 shadow-lg ${
+                      irrigationOn
+                        ? 'bg-blue-500/80 border-blue-200 shadow-[0_0_25px_rgba(59,130,246,0.65)]'
+                        : 'bg-black/40 border-blue-500/30 shadow-[0_0_14px_rgba(59,130,246,0.35)] hover:shadow-[0_0_18px_rgba(59,130,246,0.55)]'
+                    }`}
+                  >
+                    <Droplets className={`w-7 h-7 mx-auto ${irrigationOn ? 'text-white' : 'text-blue-300'}`} />
+                  </button>
+                  <span className='text-xs text-muted-foreground text-center'>Fertilizer Pump</span>
+                </div>
               </div>
             </div>
           </div>

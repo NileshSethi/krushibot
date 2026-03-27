@@ -26,33 +26,42 @@ export default function DashboardPage() {
                 <h1 className='text-4xl md:text-7xl font-black tracking-tighter text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50'>
                     MISSION CONTROL
                 </h1>
-                <div className='flex items-center justify-center gap-3 text-emerald-400'>
+                <div className='flex items-center justify-center gap-3 text-red-400'>
                     <span className='relative flex h-3 w-3'>
-                      <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75'></span>
-                      <span className='relative inline-flex rounded-full h-3 w-3 bg-emerald-500'></span>
+                      <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'></span>
+                      <span className='relative inline-flex rounded-full h-3 w-3 bg-red-500'></span>
                     </span>
-                    <p className='text-sm uppercase tracking-[0.3em] font-medium'>System Online</p>
+                    <p className='text-sm uppercase tracking-[0.3em] font-medium'>System Offline</p>
                 </div>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto'>
-                <Card className='glass-card p-6 flex flex-col items-center justify-center gap-4 text-center border-emerald-500/20 hover:border-emerald-500/40 transition-colors group'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto justify-items-center'>
+                <Card className='glass-card p-6 w-full flex flex-col items-center justify-center gap-4 text-center border-emerald-500/20 hover:border-emerald-500/40 transition-colors group'>
                     <div className='p-4 rounded-full bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform'>
                     <Activity className='w-8 h-8' />
                     </div>
                     <div>
                     <h3 className='font-semibold text-lg'>Link Status</h3>
-                    <p className='text-emerald-400 text-sm font-mono'>CONNECTED - 5G</p>
+                    <p className='text-red-400 text-sm font-mono'>NOT CONNECTED</p>
                     </div>
                 </Card>
                 
-                <Card className='glass-card p-6 flex flex-col items-center justify-center gap-4 text-center border-purple-500/20 hover:border-purple-500/40 transition-colors group'>
+                <Card className='glass-card p-6 w-full flex flex-col items-center justify-center gap-4 text-center border-purple-500/20 hover:border-purple-500/40 transition-colors group'>
                     <div className='p-4 rounded-full bg-purple-500/10 text-purple-500 group-hover:scale-110 transition-transform'>
                     <Cpu className='w-8 h-8' />
                     </div>
                     <div>
                     <h3 className='font-semibold text-lg'>Processor</h3>
-                    <p className='text-purple-400 text-sm font-mono'>OPTIMAL - 42C</p>
+                    <p className='text-purple-400 text-sm font-mono'>RASPBERY PI 4</p>
+                    </div>
+                </Card>
+                <Card className='glass-card p-6 w-full flex flex-col items-center justify-center gap-4 text-center border-amber-500/25 hover:border-amber-500/50 transition-colors group'>
+                    <div className='p-4 rounded-full bg-amber-500/10 text-amber-400 group-hover:scale-110 transition-transform'>
+                    <Zap className='w-8 h-8' />
+                    </div>
+                    <div>
+                    <h3 className='font-semibold text-lg'>Battery Status</h3>
+                    <p className='text-amber-300 text-sm font-mono'>NOT CONNECTED</p>
                     </div>
                 </Card>
             </div>
@@ -62,19 +71,19 @@ export default function DashboardPage() {
         <section id='model-section' className='scroll-mt-24'>
              <div className='border-l-2 border-emerald-500 pl-6 mb-8'>
                 <h2 className='text-3xl font-bold tracking-tight'>Digital Twin</h2>
-                <p className='text-muted-foreground'>Real-time telemetry rendering of the breakdown unit.</p>
+                <p className='text-muted-foreground'>Real time telemetry rendering of the breakdown unit.</p>
              </div>
              
              <Card className='glass-card border-white/10 overflow-hidden h-[500px] relative bg-gradient-to-b from-white/5 to-transparent'>
                 <div className='absolute top-4 right-4 z-10 flex gap-2'>
-                    <span className='px-2 py-1 rounded bg-black/50 text-[10px] text-emerald-400 border border-emerald-500/30 font-mono'>
-                        LIDAR: ACTIVE
+                    <span className='px-2 py-1 rounded bg-black/50 text-[10px] text-red-400 border border-red-500/30 font-mono'>
+                        RC: OFFLINE
                     </span>
                      <span className='px-2 py-1 rounded bg-black/50 text-[10px] text-blue-400 border border-blue-500/30 font-mono'>
                         GYRO: STABLE
                     </span>
                 </div>
-                <ModelViewer />
+                     <ModelViewer interactive />
              </Card>
         </section>
 
@@ -83,29 +92,53 @@ export default function DashboardPage() {
             <div className='space-y-6'>
                  <div className='border-l-2 border-amber-500 pl-6'>
                     <h2 className='text-3xl font-bold tracking-tight'>Mission Objectives</h2>
-                    <p className='text-muted-foreground'>Current operational challenges and targets.</p>
+                    <p className='text-muted-foreground'>Operational drivers and constraints.</p>
                  </div>
 
                  <div className='space-y-4'>
                     <Card className='p-6 glass-card border-white/5 hover:bg-white/5 transition-colors'>
                         <div className='flex items-start gap-4'>
                             <AlertTriangle className='w-6 h-6 text-amber-500 shrink-0' />
-                            <div>
-                                <h3 className='font-semibold mb-2'>Agricultural Efficiency</h3>
+                            <div className='space-y-2'>
+                                <h3 className='font-semibold'>Agricultural Efficiency</h3>
                                 <p className='text-sm text-muted-foreground leading-relaxed'>
-                                    Traditional farming methods lack the precision required for modern crop management, leading to resource wastage and lower yields. Manual monitoring is labor-intensive and error-prone.
+                                    Precision farming struggles with uneven nutrient delivery, over-watering, and fertilizer drift. Automated sensing and metered application reduce waste and stabilize yields.
                                 </p>
                             </div>
                         </div>
                     </Card>
 
                     <Card className='p-6 glass-card border-white/5 hover:bg-white/5 transition-colors'>
-                         <div className='flex items-start gap-4'>
+                        <div className='flex items-start gap-4'>
                             <Target className='w-6 h-6 text-red-500 shrink-0' />
-                            <div>
-                                <h3 className='font-semibold mb-2'>Surveillance Gaps</h3>
+                            <div className='space-y-2'>
+                                <h3 className='font-semibold'>Surveillance & Monitoring</h3>
                                 <p className='text-sm text-muted-foreground leading-relaxed'>
-                                    Large scale perimeters require 24/7 monitoring capabilities that static cameras cannot provide. Blind spots and terrain challenges compromise security integrity.
+                                    Wide fields create blind spots for manual patrols. Continuous sensor sweeps and camera coverage close gaps and surface anomalies before they impact crops.
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card className='p-6 glass-card border-white/5 hover:bg-white/5 transition-colors'>
+                        <div className='flex items-start gap-4'>
+                            <ListTodo className='w-6 h-6 text-emerald-500 shrink-0' />
+                            <div className='space-y-2'>
+                                <h3 className='font-semibold'>Labor Optimization</h3>
+                                <p className='text-sm text-muted-foreground leading-relaxed'>
+                                    Manual scouting is inconsistent and costly. Task automation stabilizes schedule adherence, reduces fatigue-driven errors, and frees operators for higher-value decisions.
+                                </p>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card className='p-6 glass-card border-white/5 hover:bg-white/5 transition-colors'>
+                        <div className='flex items-start gap-4'>
+                            <CheckCircle2 className='w-6 h-6 text-blue-400 shrink-0' />
+                            <div className='space-y-2'>
+                                <h3 className='font-semibold'>Sustainability Goals</h3>
+                                <p className='text-sm text-muted-foreground leading-relaxed'>
+                                    Controlled irrigation and precise pesticide dosing conserve water, limit runoff, and lower chemical loads, keeping the environmental footprint within target bounds.
                                 </p>
                             </div>
                         </div>
@@ -116,37 +149,66 @@ export default function DashboardPage() {
             <div className='space-y-6'>
                  <div className='border-l-2 border-emerald-500 pl-6'>
                     <h2 className='text-3xl font-bold tracking-tight'>System Solutions</h2>
-                    <p className='text-muted-foreground'>Automated response protocols.</p>
+                    <p className='text-muted-foreground'>Architecture aligned to field operations.</p>
                  </div>
 
-                 <Card className='p-8 glass-card border-emerald-500/20 bg-emerald-950/10'>
-                    <ul className='space-y-6'>
-                        <li className='flex gap-4'>
-                            <CheckCircle2 className='w-6 h-6 text-emerald-500 shrink-0' />
-                            <div>
-                                <h4 className='font-semibold text-emerald-100'>Autonomous Pathfinding</h4>
-                                <p className='text-sm text-emerald-400/70 mt-1'>
-                                    Utilizing A* algorithms and computer vision to navigate complex terrain without human intervention.
-                                </p>
-                            </div>
-                        </li>
-                         <li className='flex gap-4'>
-                            <div className='p-1 rounded-full bg-emerald-500/20'>
-                                <ListTodo className='w-4 h-4 text-emerald-500' />
-                            </div>
-                            <div>
-                                <h4 className='font-semibold text-emerald-100'>Precision Application</h4>
-                                <p className='text-sm text-emerald-400/70 mt-1'>
-                                    Targeted pesticide and fertilizer distribution controlled by sensor array feedback loops.
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
+                 <Card className='p-8 glass-card border-emerald-500/20 bg-emerald-950/10 space-y-6'>
+                    <div className='flex gap-4'>
+                        <CheckCircle2 className='w-6 h-6 text-emerald-500 shrink-0' />
+                        <div>
+                            <h4 className='font-semibold text-emerald-100'>Autonomous Pathfinding</h4>
+                            <p className='text-sm text-emerald-400/70 mt-1'>
+                                Sensor-led routing using ultrasonic range checks and rule-based turns to avoid obstacles while holding row alignment—no speculative AI claims.
+                            </p>
+                        </div>
+                    </div>
 
-                    <div className='mt-8 pt-8 border-t border-emerald-500/20'>
-                        <p className='text-xs uppercase tracking-widest text-emerald-500/50 text-center'>
-                            Protocol v2.4.1 Active
-                        </p>
+                    <div className='flex gap-4'>
+                        <div className='p-1 rounded-full bg-emerald-500/20'>
+                            <ListTodo className='w-4 h-4 text-emerald-500' />
+                        </div>
+                        <div>
+                            <h4 className='font-semibold text-emerald-100'>Precision Application</h4>
+                            <p className='text-sm text-emerald-400/70 mt-1'>
+                                Metered irrigation and seeding triggered by soil moisture and prescription maps to deliver only what each zone needs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className='flex gap-4'>
+                        <div className='p-1 rounded-full bg-emerald-500/20'>
+                            <Activity className='w-4 h-4 text-emerald-500' />
+                        </div>
+                        <div>
+                            <h4 className='font-semibold text-emerald-100'>Real-Time Telemetry</h4>
+                            <p className='text-sm text-emerald-400/70 mt-1'>
+                                Continuous feedback loop streams location, power, and implement state to the dashboard for operator oversight.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className='flex gap-4'>
+                        <div className='p-1 rounded-full bg-emerald-500/20'>
+                            <Cpu className='w-4 h-4 text-emerald-500' />
+                        </div>
+                        <div>
+                            <h4 className='font-semibold text-emerald-100'>Remote Control System</h4>
+                            <p className='text-sm text-emerald-400/70 mt-1'>
+                                Low-latency commands travel from the dashboard to the rover via secure API/WebSocket channels, keeping manual overrides responsive.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className='flex gap-4'>
+                        <div className='p-1 rounded-full bg-emerald-500/20'>
+                            <Zap className='w-4 h-4 text-emerald-500' />
+                        </div>
+                        <div>
+                            <h4 className='font-semibold text-emerald-100'>Hardware Integration Layer</h4>
+                            <p className='text-sm text-emerald-400/70 mt-1'>
+                                Raspberry Pi orchestration ties sensors, motor drivers, and relays into modular services so implements can be swapped without rewriting control code.
+                            </p>
+                        </div>
                     </div>
                  </Card>
             </div>
