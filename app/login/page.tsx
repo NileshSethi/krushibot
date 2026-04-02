@@ -38,12 +38,11 @@ export default function LoginPage() {
       const data = await res.json()
 
       if (res.status === 404 && data.message === 'USER_NOT_FOUND') {
-        router.push('/signup')
-        return
+        throw new Error('Operator ID not found. Please check your credentials or sign up.')
       } else if (res.status === 401 && data.message === 'INVALID_PASSWORD') {
-        throw new Error('Invalid password.')
+        throw new Error('Invalid password. Please try again.')
       } else if (!res.ok) {
-        throw new Error(data.message || 'Login failed')
+        throw new Error(data.message || 'Login failed. Please try again.')
       }
 
       sessionStorage.setItem('krushibot_user', JSON.stringify(formData.operator_id))

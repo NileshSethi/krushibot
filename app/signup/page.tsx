@@ -35,12 +35,11 @@ export default function SignupPage() {
       const data = await res.json()
 
       if (res.status === 409 && data.message === 'USER_EXISTS') {
-        router.push('/login')
-        return
+        throw new Error('This Operator ID or Email already exists. Please login or use different credentials.')
       }
 
       if (!res.ok) {
-        throw new Error(data.message || 'Signup failed')
+        throw new Error(data.message || 'Signup failed. Please try again.')
       }
 
       // Auto-login the user and go straight to the dashboard
