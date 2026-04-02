@@ -56,7 +56,7 @@ export default function LandingPage() {
         <br>
         </br>
         <h1 className='text-5xl md:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent animate-fade-in'>
-          KRUSHI BOT
+          KRUSHI-BOT
         </h1>
         <br>
         </br>
