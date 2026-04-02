@@ -5,8 +5,15 @@ import * as THREE from "three";
 import { GLTFLoader } from "three-stdlib";
 import { OrbitControls } from "three-stdlib";
 
-const ModelViewer: React.FC = () => {
+type ModelViewerProps = {
+  interactive?: boolean;
+};
+
+const ModelViewer: React.FC<ModelViewerProps> = ({ interactive = false }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const modelRef = useRef<THREE.Group | null>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const clockRef = useRef(new THREE.Clock());
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -48,14 +55,18 @@ const ModelViewer: React.FC = () => {
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enabled = false; // Disable user interaction
-    controls.autoRotate = true; // Optional: keep it moving slightly so it's not static
-    controls.autoRotateSpeed = 2;
     controls.enableDamping = true;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 4;
+    controls.enabled = interactive;
+    controls.enableRotate = interactive;
     controls.enableZoom = true;
     controls.enablePan = false;
+    controls.screenSpacePanning = false;
+    controls.autoRotate = false;
+    controls.mouseButtons = {
+      LEFT: THREE.MOUSE.ROTATE,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.ROTATE,
+    };
 
     // Load Model
     const loader = new GLTFLoader();
@@ -63,6 +74,7 @@ const ModelViewer: React.FC = () => {
       "/bot.glb",
       (gltf) => {
         const model = gltf.scene;
+        modelRef.current = model;
         
         // Center model
         const box = new THREE.Box3().setFromObject(model);
@@ -78,6 +90,15 @@ const ModelViewer: React.FC = () => {
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.5;
         camera.position.z = cameraZ;
         camera.updateProjectionMatrix();
+
+        controls.target.copy(center);
+
+        if (interactive) {
+          controls.minDistance = maxDim * 0.6;
+          controls.maxDistance = maxDim * 4;
+          controls.update();
+        }
+
       },
       undefined,
       (error) => {
@@ -85,9 +106,29 @@ const ModelViewer: React.FC = () => {
       }
     );
 
-    // Animation loop
+    const baseSpeed = 0.3;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const bounds = container.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      mouseRef.current = { x, y: -y };
+    };
+
+    container.addEventListener('pointermove', handlePointerMove);
+
     const animate = () => {
       requestAnimationFrame(animate);
+
+      const time = clockRef.current.getElapsedTime();
+      const model = modelRef.current;
+      if (model) {
+        const targetX = mouseRef.current.y * 0.3;
+        const targetY = time * baseSpeed + mouseRef.current.x * 0.3;
+        model.rotation.x = THREE.MathUtils.lerp(model.rotation.x, targetX, 0.05);
+        model.rotation.y = THREE.MathUtils.lerp(model.rotation.y, targetY, 0.05);
+      }
+
       controls.update();
       renderer.render(scene, camera);
     };
@@ -104,6 +145,7 @@ const ModelViewer: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      container.removeEventListener('pointermove', handlePointerMove);
       container.removeChild(renderer.domElement);
       renderer.dispose();
     };
@@ -112,7 +154,7 @@ const ModelViewer: React.FC = () => {
   return (
     <div 
       ref={containerRef} 
-      className="w-full h-full relative"
+      className={interactive ? "w-full h-full relative cursor-grab active:cursor-grabbing" : "w-full h-full relative"}
       style={{ minHeight: "300px" }}
     />
   );

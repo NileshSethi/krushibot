@@ -117,7 +117,7 @@ export default function LoginPage() {
         </form>
 
         <div className='mt-6 border-t border-white/5 pt-4 text-center'>
-          <p className='text-xs text-muted-foreground mb-3'>Protected by military-grade encryption protocols</p>
+          <p className='text-xs text-muted-foreground mb-3'>Protected using <b>bcrypt</b> methods and backend verification controls.</p>
           <p className='text-xs text-muted-foreground mb-3'>New operator?</p>
           <Link href='/signup' className='block w-full'>
             <Button variant="outline" className='w-full border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300'>

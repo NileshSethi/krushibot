@@ -42,6 +42,8 @@ const DashboardControls: React.FC = () => {
   const [joystickPos, setJoystickPos] = useState({ x: 0, y: 0 })
   const joystickRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
+  const [seedingOn, setSeedingOn] = useState(false)
+  const [irrigationOn, setIrrigationOn] = useState(false)
 
   // implement state — true means the physical output is currently ON
   const [seedingOn, setSeedingOn] = useState(false)

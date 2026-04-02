@@ -1,24 +1,24 @@
-# PBL1 [ KRUSHIBOT ] — A Semi-Autonomous 4G-Enabled Smart Agricultural Rover for Precision Ploughing, Seeding, and Irrigation
+# PBL1 — Intelligent Web Interface with Secure Operator Authentication
 
 ## Overview
 
-This is a full stack web application designed to deliver a responsive, visually immersive interface combined with a secure and efficient authentication system. The platform integrates modern frontend rendering techniques with a robust backend architecture to ensure both performance and reliability.
+PBL1 is a full-stack web application designed to deliver a responsive, visually immersive interface combined with a secure and efficient authentication system. The platform integrates modern frontend rendering techniques with a robust backend architecture to ensure both performance and reliability.
 
-The system emphasizes minimal latency, clean authentication flow, and structured scalability, making it suitable for real world deployment scenarios.
+The system emphasizes minimal latency, clean authentication flow, and structured scalability, making it suitable for real-world deployment scenarios.
 
-
+---
 
 ## Core Features
 
 ### 1. Secure Operator Authentication
 
-* Operator based login system using **operator ID and password**
+* Operator-based login system using **operator ID and password**
 * Passwords securely hashed using **bcrypt**
 * Stateless authentication via **JWT**
 * Protected routes using middleware
 * Automatic redirection for unauthorized access
 
-
+---
 
 ### 2. User Lifecycle Management
 
@@ -27,25 +27,26 @@ The system emphasizes minimal latency, clean authentication flow, and structured
 * Validation for duplicate users (operator ID / email)
 * Seamless transition between signup and login
 
+---
 
-
-### 3. Performance Oriented Architecture
+### 3. Performance-Oriented Architecture
 
 * Optimized backend queries using indexed fields
-* Non blocking asynchronous request handling
+* Non-blocking asynchronous request handling
 * Reduced authentication latency (no OTP overhead)
 * Clean separation of concerns (routes, controllers, middleware)
 
-
+---
 
 ### 4. Interactive Frontend Experience
 
 * Fullscreen responsive layout
 * Integrated **3D model rendering using Three.js**
-* Smooth scroll based transitions
+* Smooth scroll-based transitions
+* Cursor-based interaction with 3D elements
 * Minimal and focused UI design
 
-
+---
 
 ### 5. Structured Backend Design
 
@@ -170,7 +171,7 @@ node server/server.js
 
 Use Live Server or open `login.html`.
 
-
+---
 
 ## Design Principles
 
@@ -178,27 +179,23 @@ Use Live Server or open `login.html`.
 * Minimal latency and reduced blocking operations
 * Clear separation of frontend and backend responsibilities
 * Scalable architecture for future expansion
-* Security first implementation
+* Security-first implementation
 
-
+---
 
 ## Future Enhancements
 
-* Role based access control (RBAC)
+* Role-based access control (RBAC)
 * Audit logging and monitoring
 * API rate limiting and advanced security hardening
 * Deployment with containerization (Docker)
-* Cloud based database integration
+* Cloud-based database integration
 
+---
 
+## Author
 
-## Authors
-
-Nilesh Sethi |
-Sai Randive  |
-Yash Samtani |
-Vaishnovi Bhosle 
-
+Nilesh Sethi
 BTech Computer Science Engineering
 
 ---

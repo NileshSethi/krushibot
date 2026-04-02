@@ -50,12 +50,18 @@ export default function LandingPage() {
       <section className='relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 z-10'>
         <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none' />
         
-        <h1 className='text-5xl md:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent animate-fade-in'>
+        <h4 className='text-5xl md:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent animate-fade-in'>
           FUTURE OF<br />AGRO-NETICS
+        </h4>
+        <br>
+        </br>
+        <h1 className='text-5xl md:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent animate-fade-in'>
+          KRUSHI BOT
         </h1>
-        
+        <br>
+        </br>
         <p className='text-lg md:text-xl text-muted-foreground max-w-2xl mb-8 animate-fade-in delay-100'>
-          Autonomous robotics control interface designed for precision agriculture and next-gen surveillance.
+          Autonomous robotics control interface designed for precision agriculture and next gen surveillance.
         </p>
 
         <div className='flex flex-col md:flex-row gap-4 animate-fade-in delay-200'>
@@ -70,7 +76,7 @@ export default function LandingPage() {
             </Button>
           </Link>
         </div>
-
+        
         <div className='absolute bottom-10 flex flex-col items-center -space-y-4 opacity-100'>
           <ChevronDown className='w-10 h-10 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-bounce' />
           <ChevronDown className='w-10 h-10 text-white/80 drop-shadow-[0_0_10px_rgba(255,255,255,0.6)] animate-bounce delay-75 duration-1000' />
@@ -84,7 +90,7 @@ export default function LandingPage() {
           <div className='space-y-8'>
             <h2 className='text-4xl font-bold tracking-tight'>Precision Engineering</h2>
             <p className='text-muted-foreground text-lg'>
-              Experience full 3D manipulation with our real-time WebGL viewer. Inspect every detail of your autonomous unit before deployment.
+              Experience full 3D manipulation with our real time WebGL viewer. Inspect every detail of your autonomous unit before deployment.
             </p>
             
             <div className='grid gap-4'>
@@ -99,7 +105,7 @@ export default function LandingPage() {
                 <Zap className='w-6 h-6 text-yellow-400 group-hover:drop-shadow-[0_0_10px_rgba(250,204,21,0.8)] transition-all' />
                 <div>
                   <h3 className='font-semibold group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] transition-all'>Light Speed Response</h3>
-                  <p className='text-sm text-muted-foreground'>Sub-10ms latency control signals.</p>
+                  <p className='text-sm text-muted-foreground'>Low latency control signals.</p>
                 </div>
               </div>
             </div>
@@ -121,9 +127,9 @@ export default function LandingPage() {
 
           <div className='grid md:grid-cols-3 gap-8'>
             {[
-              { title: 'Real-time Telemetry', desc: 'Monitor speed, signal strength, and motor status instantly.' },
-              { title: 'Global Positioning', desc: 'Track your units anywhere on the globe with sub-meter accuracy.' },
-              { title: 'Neural Navigation', desc: 'AI-driven pathfinding avoids obstacles automatically.' },
+              { title: 'Real time Telemetry', desc: 'Control speed, signal strength, and motor status instantly.' },
+              { title: 'Remote Command & Control', desc: 'Control and monitor your system remotely with real time command execution and instant feedback.' },
+              { title: 'Sensor Integration System', desc: 'Seamlessly integrates multiple sensors to provide real time environmental data and responsive system behavior. ' },
             ].map((feature, i) => (
               <Card key={i} className='p-8 bg-transparent border-white/10 hover:border-white/30 transition-all group hover:-translate-y-1 hover:shadow-none'>
                 <Globe className='w-8 h-8 mb-4 text-blue-400 group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,0.8)] transition-all' />
@@ -142,9 +148,13 @@ export default function LandingPage() {
           <p className='text-muted-foreground text-lg'>
             Join the automated revolution today. Access the console and take control.
           </p>
+          <p>
+
+          </p>
+          
           <Link href='/signup'>
             <Button className='h-16 px-12 text-lg rounded-full shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-none transition-all'>
-              Enter Dashboard
+              Get Started <ArrowRight className='ml-2 w-5 h-5' />
             </Button>
           </Link>
         </div>
@@ -154,12 +164,12 @@ export default function LandingPage() {
         <div className='w-full overflow-hidden flex whitespace-nowrap'>
              <div className='animate-marquee-slow inline-flex items-center min-w-full justify-around'>
                   {[1,2,3,4].map((i) => (
-                    <span key={i} className='mx-12 opacity-50'>&copy; 2026 KrushiBot Dynamics Inc. All systems normal.</span>
+                    <span key={i} className='mx-12 opacity-50'>&copy; 2026 KrushiBot Dynamics Inc.</span>
                  ))}
              </div>
              <div className='animate-marquee-slow inline-flex items-center min-w-full justify-around' aria-hidden='true'>
                   {[1,2,3,4].map((i) => (
-                    <span key={`dup-${i}`} className='mx-12 opacity-50'>&copy; 2026 KrushiBot Dynamics Inc. All systems normal.</span>
+                    <span key={`dup-${i}`} className='mx-12 opacity-50'>&copy; 2026 KrushiBot Dynamics Inc.</span>
                  ))}
              </div>
         </div>
