@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Old Express server (not used in Vercel deployment)
+/server/
+package-express.json
+
+# Old MySQL schemas (using Supabase now)
+schema.SQL
+schema_new.sql

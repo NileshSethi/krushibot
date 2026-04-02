@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import supabase from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { RowDataPacket } from 'mysql2';
 
 export async function POST(req: Request) {
   try {
@@ -13,16 +12,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Operator ID and Password are required' }, { status: 400 });
     }
 
-    const [rows] = await pool.execute<RowDataPacket[]>(
-      'SELECT * FROM operators WHERE operator_id = ?',
-      [operator_id]
-    );
+    const { data: user, error } = await supabase
+      .from('operators')
+      .select('*')
+      .eq('operator_id', operator_id)
+      .single();
 
-    if (rows.length === 0) {
+    if (error || !user) {
       return NextResponse.json({ message: 'USER_NOT_FOUND' }, { status: 404 });
     }
-
-    const user = rows[0];
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
