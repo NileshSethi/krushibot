@@ -1,82 +1,81 @@
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const PI_SERVER_URL = process.env.PI_SERVER_URL || 'http://raspberrypi.local:5001';
-const PI_SECRET_KEY = process.env.PI_SECRET_KEY || 'change-this-shared-secret';
+const ESP32_URL    = process.env.ESP32_URL    || 'http://192.168.1.100';
+const ESP32_SECRET = process.env.ESP32_SECRET || 'change-this-to-a-long-random-string-minimum-32-chars';
 
-export async function POST(req: Request) {
-  // Verify the auth cookie before forwarding any command to the Pi
-  const cookieHeader = req.headers.get('cookie') || '';
-  const token = cookieHeader
-    .split(';')
-    .find(c => c.trim().startsWith('auth_token='))
-    ?.split('=')[1];
+const ALLOWED_COMMANDS = new Set([
+  'start', 'stop', 'emergency_stop',
+  'seeding_on', 'seeding_off',
+  'ploughing_on', 'ploughing_off',
+  'irrigation_on', 'irrigation_off',
+  'joystick',
+]);
 
-  if (!token) {
-    return NextResponse.json({ message: 'UNAUTHORIZED' }, { status: 401 });
-  }
-
+async function verifyAuth(req: Request): Promise<boolean> {
+  const cookie = req.headers.get('cookie') || '';
+  const token  = cookie.split(';').find(c => c.trim().startsWith('auth_token='))?.split('=')[1];
+  if (!token) return false;
   try {
     const secret = new TextEncoder().encode(
       process.env.JWT_SECRET || 'fallback-secret-do-not-use-in-prod'
     );
     await jwtVerify(token, secret);
+    return true;
   } catch {
-    return NextResponse.json({ message: 'INVALID_TOKEN' }, { status: 401 });
+    return false;
+  }
+}
+
+export async function POST(req: Request) {
+  if (!(await verifyAuth(req))) {
+    return NextResponse.json({ message: 'UNAUTHORIZED' }, { status: 401 });
   }
 
-  let body: { command: string; value?: number };
+  let body: { command: string; speed?: number; dir?: string };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ message: 'Bad request body' }, { status: 400 });
   }
 
-  const { command, value } = body;
-
-  // Whitelist of allowed commands — only these ever reach the Pi
-  const ALLOWED_COMMANDS = [
-    'start',
-    'stop',
-    'emergency_stop',
-    'seeding_on',
-    'seeding_off',
-    'ploughing_on',
-    'ploughing_off',
-    'irrigation_on',
-    'irrigation_off',
-  ] as const;
-
-  if (!ALLOWED_COMMANDS.includes(command as typeof ALLOWED_COMMANDS[number])) {
+  if (!ALLOWED_COMMANDS.has(body.command)) {
     return NextResponse.json({ message: 'Unknown command' }, { status: 400 });
   }
 
+  // Extra validation for joystick command
+  if (body.command === 'joystick') {
+    const speed = Number(body.speed ?? 0);
+    if (speed < 0 || speed > 255 || !Number.isInteger(speed)) {
+      return NextResponse.json({ message: 'Invalid speed' }, { status: 400 });
+    }
+    if (body.dir && !['forward', 'backward', 'stop'].includes(body.dir)) {
+      return NextResponse.json({ message: 'Invalid dir' }, { status: 400 });
+    }
+  }
+
   try {
-    const piRes = await fetch(`${PI_SERVER_URL}/command`, {
+    const esp32Res = await fetch(`${ESP32_URL}/command`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Shared secret so only your Next.js server can talk to the Pi
-        'X-Pi-Secret': PI_SECRET_KEY,
+        'X-ESP32-Secret': ESP32_SECRET,
       },
-      body: JSON.stringify({ command, value }),
-      // Abort quickly if the Pi is unreachable
-      signal: AbortSignal.timeout(4000),
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(3000),
     });
 
-    if (!piRes.ok) {
-      const err = await piRes.text();
-      console.error('Pi server error:', err);
-      return NextResponse.json({ message: 'Pi error', detail: err }, { status: 502 });
+    if (!esp32Res.ok) {
+      const err = await esp32Res.text();
+      return NextResponse.json({ message: 'ESP32 error', detail: err }, { status: 502 });
     }
 
-    const data = await piRes.json();
+    const data = await esp32Res.json();
     return NextResponse.json({ message: 'OK', ...data });
   } catch (err: any) {
     if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-      return NextResponse.json({ message: 'Pi unreachable (timeout)' }, { status: 504 });
+      return NextResponse.json({ message: 'ESP32 unreachable (timeout)' }, { status: 504 });
     }
-    console.error('Command relay error:', err);
-    return NextResponse.json({ message: 'Relay error' }, { status: 500 });
+    return NextResponse.json({ message: 'Relay error', detail: err.message }, { status: 500 });
   }
 }
