@@ -9,9 +9,26 @@ import ModelViewer from '@/components/ModelViewer'
 import DashboardNav from '@/components/DashboardNav'
 import { Droplets, Navigation, BatteryCharging, Leaf, Target, Map, Bot, Server, CheckCircle2, Factory } from 'lucide-react'
 
+// Logos visible only on the Dashboard (After Login)
+const DashboardLogos = () => (
+  <div className="absolute top-[10px] left-[10px] md:top-[20px] md:left-[20px] flex items-center gap-3 z-50 pointer-events-none">
+    <img 
+      src="/krushilogonoback.png" 
+      alt="Krushi Bot" 
+      className="h-[28px] md:h-[40px] w-auto object-contain opacity-90 brightness-110" 
+    />
+    <img 
+      src="/symbinobackground.png" 
+      alt="Symbiosis" 
+      className="h-[28px] md:h-[40px] w-auto object-contain opacity-90 brightness-110" 
+    />
+  </div>
+);
+
 export default function DashboardPage() {
   return (
     <div className='relative min-h-screen w-full bg-transparent overflow-x-hidden'>
+      <DashboardLogos />
       <DashboardNav />
 
       <main className='relative z-10 container mx-auto px-4 py-24 space-y-24'>  

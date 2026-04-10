@@ -100,7 +100,7 @@ const HeroSection = () => {
             <div className="flex-1 marquee-container max-w-full">
               <div className="marquee-track text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] text-sm font-bold tracking-tighter uppercase">
                 {[...Array(16)].map((_, i) => (
-                  <span key={i} className="shrink-0 flex items-center">THE FUTURE OF AGRONETICS</span>
+                  <span key={i} className="shrink-0 flex items-center">PURCHASES COMING SOON</span>
                 ))}
               </div>
             </div>
@@ -156,7 +156,7 @@ const HeroSection = () => {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.1 }}
               className="text-white mt-4 tracking-[0.3em] uppercase text-sm md:text-base font-bold drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
             >
-              Autonomous Farming
+              Semi Autonomous Farming
             </motion.p>
           </div>
 
@@ -259,11 +259,11 @@ const HeroSection = () => {
             {/* Simulated Checkout Box */}
             <div className="w-full max-w-sm p-8 bg-white/5 border border-white/20 rounded-2xl backdrop-blur-xl shadow-2xl">
               <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
-                <span className="text-sm uppercase tracking-wider text-white/70">PBL Edition</span>
-                <span className="text-xl font-bold text-white">$24,999</span>
+                <span className="text-sm uppercase tracking-wider text-white/70">Starter Edition</span>
+                <span className="text-xl font-bold text-white">Rs. 30,000</span>
               </div>
               <button className="w-full py-4 bg-white text-black font-black uppercase tracking-[0.2em] rounded-full hover:bg-neutral-300 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                Confirm Purchase
+                COMING SOON
               </button>
             </div>
           </div>
