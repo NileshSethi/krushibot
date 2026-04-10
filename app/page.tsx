@@ -22,7 +22,7 @@ export default function LandingPage() {
         </div>
 
         <div className='flex gap-4 shrink-0 bg-black/50 pl-4 py-2 pr-6 rounded-l-xl border-l border-white/5 z-10 absolute right-0'>
-          <Link href='/signup'>
+          <Link href='/login'>
             <Button className='text-xs uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black transition-all'>
               Get Started
             </Button>
