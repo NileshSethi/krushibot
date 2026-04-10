@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ShieldCheck, User, Lock } from 'lucide-react'
 import StarBackground from '@/components/StarBackground'
+import { useAuth } from '@/components/AuthProvider'
 
 export default function LoginPage() {
   const router = useRouter()
+  const { login } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -45,7 +47,7 @@ export default function LoginPage() {
         throw new Error(data.message || 'Login failed. Please try again.')
       }
 
-      sessionStorage.setItem('krushibot_user', JSON.stringify(formData.operator_id))
+      login(formData.operator_id)
       // Force immediate redirect to dashboard
       router.push('/dashboard')
 
@@ -57,11 +59,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='relative min-h-screen w-full flex items-center justify-center p-4 bg-black overflow-hidden'>
-      <div className='absolute inset-0 z-0 pointer-events-none opacity-40'>
-        <StarBackground />
-      </div>
-
+    <div className='relative min-h-screen w-full flex items-center justify-center p-4 bg-transparent overflow-hidden'>
       <Card className='glass-card w-full max-w-md p-8 relative z-10 border-white/10 bg-black/50 backdrop-blur-md'>
         <div className='text-center mb-8'>
           <div className='inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 mb-4 ring-1 ring-emerald-500/30'>

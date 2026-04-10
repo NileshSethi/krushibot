@@ -1,47 +1,17 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useAuth } from '@/components/AuthProvider';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { User, LogOut, Menu, X, LayoutDashboard, Database, Box, Settings } from 'lucide-react';
+import { User, LogOut, Menu, X, LayoutDashboard, Database, Box, Settings, ShoppingCart } from 'lucide-react';
 
 export default function DashboardNav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<string | null>(null);
+  const { user, logout } = useAuth();
 
-  useEffect(() => {
-    // Only access sessionStorage on client mount
-    if (typeof window !== 'undefined') {
-      const storedUser = sessionStorage.getItem('krushibot_user');
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-
-    // End session when tab/window is closed
-    const handleBeforeUnload = () => {
-      // Use sendBeacon to reliably call logout even during page close
-      navigator.sendBeacon('/api/auth/logout');
-      sessionStorage.removeItem('krushibot_user');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } catch (e) {
-      console.error('Logout failed', e);
-    }
-    sessionStorage.removeItem('krushibot_user');
-    sessionStorage.removeItem('verified_email');
-    window.location.href = '/login';
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -74,27 +44,37 @@ export default function DashboardNav() {
            >
             <div className='space-y-1'>
               <div className='px-4 py-3 border-b border-white/5 mb-2'>
-                <h3 className='text-sm font-semibold text-white'>Mission Control</h3>
-                <p className='text-xs text-muted-foreground uppercase tracking-wider mt-1'>Select Module</p>
+                <h3 className='text-sm font-semibold text-white'>Menu</h3>
+                <p className='text-xs text-muted-foreground uppercase tracking-wider mt-1'>Information</p>
               </div>
-              
-              <Link href='/dashboard' onClick={() => setIsOpen(false)}>
+
+              <Link href='/' onClick={() => setIsOpen(false)}>
                 <Button variant='ghost' className='w-full justify-start h-12 text-muted-foreground hover:text-white hover:bg-white/5 rounded-xl'>
-                  <LayoutDashboard className='w-4 h-4 mr-3' /> System Overview
-                </Button>
-              </Link>
-              
-              <Link href='/dashboard#model-section' onClick={() => setIsOpen(false)}>
-                <Button variant='ghost' className='w-full justify-start h-12 text-muted-foreground hover:text-white hover:bg-white/5 rounded-xl'>
-                  <Box className='w-4 h-4 mr-3' /> 3D Visualization
+                  <LayoutDashboard className='w-4 h-4 mr-3' /> Home
                 </Button>
               </Link>
 
-              <Link href='/controls' onClick={() => setIsOpen(false)}>
+              <a
+                href='/dashboard#use-cases'
+                onClick={(e) => {
+                  setIsOpen(false);
+                  const element = document.getElementById('use-cases');
+                  if (element) {
+                    e.preventDefault();
+                    element.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
                 <Button variant='ghost' className='w-full justify-start h-12 text-muted-foreground hover:text-white hover:bg-white/5 rounded-xl'>
-                  <Settings className='w-4 h-4 mr-3' /> Manual Override
+                  <Box className='w-4 h-4 mr-3' /> Product Info
                 </Button>
-              </Link>
+              </a>
+
+              <a href='/dashboard/premium' onClick={() => setIsOpen(false)}>    
+                <Button variant='ghost' className='w-full justify-start h-12 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/10 rounded-xl mt-2'>  
+                  <ShoppingCart className='w-4 h-4 mr-3' /> Order KRUSHI BOT   
+                </Button>
+              </a>
               
               <div className='border-t border-white/5 my-2 pt-2'>
                 {user ? (
@@ -103,12 +83,12 @@ export default function DashboardNav() {
                     className='w-full justify-start h-12 text-red-400 hover:text-red-300 hover:bg-red-900/10 rounded-xl'
                     onClick={handleLogout}
                   >
-                    <LogOut className='w-4 h-4 mr-3' /> End Session
+                    <LogOut className='w-4 h-4 mr-3' /> Logout
                   </Button>
                 ) : (
                   <Link href='/login'>
-                    <Button variant='ghost' className='w-full justify-start h-12 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/10 rounded-xl'>
-                      <User className='w-4 h-4 mr-3' /> Verify Identity
+                    <Button variant='ghost' className='w-full justify-start h-12 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/10 rounded-xl'>   
+                      <User className='w-4 h-4 mr-3' /> Login
                     </Button>
                   </Link>
                 )}

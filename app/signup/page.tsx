@@ -8,9 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { UserPlus, Mail, User, Lock } from 'lucide-react'
 import StarBackground from '@/components/StarBackground'
+import { useAuth } from '@/components/AuthProvider'
 
 export default function SignupPage() {
   const router = useRouter()
+  const { login } = useAuth()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -43,7 +45,7 @@ export default function SignupPage() {
       }
 
       // Auto-login the user and go straight to the dashboard
-      sessionStorage.setItem('krushibot_user', JSON.stringify(formData.operator_id))
+      login(formData.operator_id)
       router.push('/dashboard')
 
     } catch (err: any) {
@@ -54,11 +56,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className='relative min-h-screen w-full flex items-center justify-center p-4 bg-black overflow-hidden'>
-      <div className='absolute inset-0 z-0 pointer-events-none opacity-40'>
-        <StarBackground />
-      </div>
-
+    <div className='relative min-h-screen w-full flex items-center justify-center p-4 bg-transparent overflow-hidden'>
       <Card className='glass-card w-full max-w-md p-8 relative z-10 border-white/10'>
         <div className='text-center mb-8'>
           <div className='inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 mb-4 ring-1 ring-blue-500/30'>

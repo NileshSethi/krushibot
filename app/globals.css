@@ -90,3 +90,46 @@ canvas {
   white-space: nowrap;
 }
 
+.marquee-container {
+  position: relative;
+  overflow: hidden;
+  padding-left: 2rem;
+  padding-right: 0;
+}
+
+.marquee-container::before,
+.marquee-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.marquee-container::before {
+  left: 0;
+  width: 60px;
+  background: linear-gradient(to right, black, transparent);
+}
+
+.marquee-container::after {
+  right: 0;
+  width: 250px;
+  background: linear-gradient(to left, black, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  gap: 3rem;
+  padding-right: 2rem;
+  min-width: max-content;
+  animation: marquee-scroll 20s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
