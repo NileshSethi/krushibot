@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -8,7 +8,7 @@ import ModelViewer from '@/components/ModelViewer'
 import StarBackground from '@/components/StarBackground'
 import {
   ChevronDown, ArrowRight, ShieldCheck,
-  Zap, Globe, Activity, Sprout
+  Zap, Globe, Activity, Sprout, X
 } from 'lucide-react'
 
 // ── Shooting-star parallax shapes ─────────────────────────────────────────────
@@ -45,6 +45,7 @@ const SHAPES = [
 ]
 
 export default function LandingPage() {
+  const [showDesktopAlert, setShowDesktopAlert] = useState(false)
   const shapeRefs   = useRef<(HTMLDivElement | null)[]>([])
   const heroTxtRef  = useRef<HTMLDivElement>(null)
   const heroStatRef = useRef<HTMLDivElement>(null)
@@ -57,6 +58,11 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+    
+    // Show popup on mount
+    setShowDesktopAlert(true)
+    const alertTimer = setTimeout(() => setShowDesktopAlert(false), 6000)
+
     let dead = false
 
     import('gsap').then(({ gsap }) => {
@@ -157,6 +163,20 @@ export default function LandingPage() {
       <div className='fixed inset-0 z-0 pointer-events-none blur-[2px]'>
         <StarBackground />
       </div>
+
+      {/* Desktop view recommendation popup */}
+      {showDesktopAlert && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-black/80 border border-white/20 backdrop-blur-md px-8 py-4 rounded-full flex items-center gap-5 animate-in slide-in-from-top-5 fade-in duration-300 shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+          <span className="text-base md:text-lg font-semibold text-white/90">Open on Desktop for best view</span>
+          <button 
+            onClick={() => setShowDesktopAlert(false)}
+            className="text-white/50 hover:text-white transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+        </div>
+      )}
 
       {/* ── Parallax shooting-star pills ─────────────────────────────────────
           Each pill: bright white glow at TOP (leading edge, direction of travel)
