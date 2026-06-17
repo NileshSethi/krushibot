@@ -224,12 +224,6 @@ export default function LandingPage() {
         <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/15 blur-[140px] rounded-full pointer-events-none' />
 
         <div ref={heroTxtRef} className='flex flex-col items-center'>
-          <img 
-            src="/symbinobackground.png" 
-            alt="Symbiosis" 
-            className="w-auto h-24 md:h-32 mb-6 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]" 
-            style={{ opacity: 0 }} 
-          />
           <h4
             className='text-5xl md:text-8xl font-black tracking-tighter mb-4 bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]'
             style={{ opacity: 0 }}

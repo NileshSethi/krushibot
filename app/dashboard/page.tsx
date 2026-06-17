@@ -12,16 +12,6 @@ import { Droplets, Navigation, BatteryCharging, Leaf, Target, Map, Bot, Server, 
 // Logos visible only on the Dashboard (After Login)
 const DashboardLogos = () => (
   <div className="absolute top-[10px] left-[10px] md:top-[20px] md:left-[20px] flex items-center gap-3 z-50 pointer-events-none">
-    <img 
-      src="/krushilogonoback.png" 
-      alt="Krushi Bot" 
-      className="h-[28px] md:h-[40px] w-auto object-contain opacity-90 brightness-110" 
-    />
-    <img 
-      src="/symbinobackground.png" 
-      alt="Symbiosis" 
-      className="h-[28px] md:h-[40px] w-auto object-contain opacity-90 brightness-110" 
-    />
   </div>
 );
 
